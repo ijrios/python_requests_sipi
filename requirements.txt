@@ -1,0 +1,14 @@
+requests
+beautifulsoup4
+urllib3
+selenium
+webdriver-manager
+pandas
+openpyxl
+numpy
+python-dateutil
+pyautogui
+office365-rest-python-client
+SharePlum
+func_timeout
+knime
