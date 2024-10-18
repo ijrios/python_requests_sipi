@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Oct 17 20:55:51 2024
+
+@author: Alexander Rios
+"""
 
 import requests
 from bs4 import BeautifulSoup
