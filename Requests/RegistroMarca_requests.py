@@ -57,17 +57,17 @@ requests.packages.urllib3.disable_warnings()
 site_url ='https://coleyco.sharepoint.com/sites/Automatizaciones/Registro%20marcas'
 
 #Credenciales
-username = "e2consultoria@cole-coabogados.com"
-password ="Automations.0"
-document_library = "/sites/Automatizaciones/Registro%20marcas/Documentacion_Marcas"
+username = os.getenv('USERNAME')
+password = os.getenv('PASSWORD')
+document_library = os.getenv('DOCUMENT_LIBRARY')
 
 try:
     ctx = ClientContext(site_url).with_credentials(UserCredential(username, password))
 except Exception as e:
     print(f"Error al establecer conexión: {e}")
 
-idS = sys.argv[1]
-#idS = 1766
+#idS = sys.argv[1]
+idS = 1766
 time.sleep(5)
 try:
     def dataframeSP(lista):
@@ -173,7 +173,7 @@ def descargar_ultimo_archivo(carpeta, extensiones_permitidas=[".png", ".jpg"]):
         ultimo_archivo = files[-1]
         file_content = bytearray()
         file_name = ultimo_archivo.properties["Name"]
-        ruta_temporal = f"C:/Users/Coleyco/Documents/Coleyco/RegistroMarca/temporal/{file_name}"
+        ruta_temporal = f"C:/Users/Usuario/Documents/Coleyco/RegistroMarca/temporal/{file_name}"
         
         with io.BytesIO() as output:
             ultimo_archivo.download(output)
@@ -208,7 +208,7 @@ if identidad != 'En nombre propio':
             ctx.execute_query()
             
             def definePathFile(name_file):
-                folder = r"C:/Users/Coleyco/Documents/Coleyco/RegistroMarca/temporal/"
+                folder = r"C:/Users/Usuario/Documents/Coleyco/RegistroMarca/temporal/"
                 name, extension = os.path.splitext(name_file)
                 return folder+"poder"+extension
 
@@ -248,7 +248,7 @@ if naturaleza != "Nominativa":
             ctx.execute_query()
 
             def definePathFile(name_file):
-                folder = r"C:/Users/Coleyco/Documents/Coleyco/RegistroMarca/temporal/"
+                folder = r"C:/Users/Usuario/Documents/Coleyco/RegistroMarca/temporal/"
                 name, extension = os.path.splitext(name_file)
                 return folder+"ilustracion"+extension
 
