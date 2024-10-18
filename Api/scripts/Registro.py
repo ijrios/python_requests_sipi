@@ -59,7 +59,6 @@ site_url ='https://coleyco.sharepoint.com/sites/Automatizaciones/Registro%20marc
 #Credenciales
 username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
-site_url = os.getenv('SITE_URL')
 document_library = os.getenv('DOCUMENT_LIBRARY')
 
 try:
@@ -68,7 +67,7 @@ except Exception as e:
     print(f"Error al establecer conexión: {e}")
 
 #idS = sys.argv[1]
-idS = 1771
+idS = 1766
 time.sleep(5)
 try:
     def dataframeSP(lista):
@@ -133,7 +132,10 @@ for row, datos in df.iterrows():
     transliteracion = datos['Transliteracion']
     poder = datos['Poder']
     numeroFolios = datos['NumeroFolios']
+    clase = datos['Clases']
     
+print(clase)
+clases = [c.strip() for c in clase.split(';')]
 
 cliente_folder_name = cliente.replace(' ', '_')
 denominacion_folder_name = denominacion.replace(' ', '_')
@@ -191,86 +193,88 @@ ctx.execute_query()
 
 cliente_folder_name = str(cliente).replace(' ', '_').replace('.', '_')
 denominacion_folder_name = str(denominacion).replace(' ', '_')
-carpeta_cliente = verificar_carpeta(base.root_folder, cliente_folder_name)
-if carpeta_cliente:
-    print(f"La carpeta '{cliente_folder_name}' existe.")
-    carpeta_denominacion = verificar_carpeta(carpeta_cliente, denominacion_folder_name)
-    if carpeta_denominacion:
-        
-        ctx.load(carpeta_denominacion.files)
-        ctx.execute_query()
-        files = carpeta_denominacion.files
-        ctx.load(files)
-        ctx.execute_query()
-        
-        def definePathFile(name_file):
-            folder = r"C:/Users/Usuario/Documents/Coleyco/RegistroMarca/temporal/"
-            name, extension = os.path.splitext(name_file)
-            return folder+"poder"+extension
 
+if identidad != 'En nombre propio':
+    carpeta_cliente = verificar_carpeta(base.root_folder, cliente_folder_name)
+    if carpeta_cliente:
+        print(f"La carpeta '{cliente_folder_name}' existe.")
+        carpeta_denominacion = verificar_carpeta(carpeta_cliente, denominacion_folder_name)
+        if carpeta_denominacion:
+            
+            ctx.load(carpeta_denominacion.files)
+            ctx.execute_query()
+            files = carpeta_denominacion.files
+            ctx.load(files)
+            ctx.execute_query()
+            
+            def definePathFile(name_file):
+                folder = r"C:/Users/Usuario/Documents/Coleyco/RegistroMarca/temporal/"
+                name, extension = os.path.splitext(name_file)
+                return folder+"poder"+extension
 
-        locationFile = ""
+            locationFile = ""
+            
+            if files:
+                first_file = files[0]
+                file_content = bytearray()
+                with io.BytesIO() as output:
+                    locationFile = definePathFile(first_file.properties["Name"])
+                    with open(locationFile, "wb") as file:
+                        first_file.download(output)
+                        ctx.execute_query()
+                        file.write(output.getvalue())
+                print("Descargado correctamente")
+            else:
+                print("No hay nada")
+                
+                
+            print(f"La carpeta '{denominacion_folder_name}' existe.")
         
-        if files:
-            first_file = files[0]
-            file_content = bytearray()
-            with io.BytesIO() as output:
-                locationFile = definePathFile(first_file.properties["Name"])
-                with open(locationFile, "wb") as file:
-                    first_file.download(output)
-                    ctx.execute_query()
-                    file.write(output.getvalue())
-            print("Descargado correctamente")
         else:
-            print("No hay ni mierda")
-            
-            
-        print(f"La carpeta '{denominacion_folder_name}' existe.")
-    
+            print(f"La carpeta '{denominacion_folder_name}' no existe dentro de '{cliente_folder_name}'.")
     else:
-        print(f"La carpeta '{denominacion_folder_name}' no existe dentro de '{cliente_folder_name}'.")
-else:
-    print(f"La carpeta '{cliente_folder_name}' no existe.")
+        print(f"La carpeta '{cliente_folder_name}' no existe.")
 
-carpeta_cliente_duo = verificar_carpeta_duo(ctx.web.get_folder_by_server_relative_url(document_library), denominacion)
-if carpeta_cliente_duo:
-    print(f"La carpeta '{denominacion}' existe.")
+if naturaleza != "Nominativa":
+    carpeta_cliente_duo = verificar_carpeta_duo(ctx.web.get_folder_by_server_relative_url(document_library), denominacion)
     if carpeta_cliente_duo:
-        
-        ctx.load(carpeta_cliente_duo.files)
-        ctx.execute_query()
-        files = carpeta_cliente_duo.files
-        ctx.load(files)
-        ctx.execute_query()
-
-        def definePathFile(name_file):
-            folder = r"C:/Users/Usuario/Documents/Coleyco/RegistroMarca/temporal/"
-            name, extension = os.path.splitext(name_file)
-            return folder+"ilustracion"+extension
-
-
-        locationFile_duo = ""
-        
-        if files:
-            first_file = files[0]
-            file_content = bytearray()
-            with io.BytesIO() as output:
-                locationFile_duo = definePathFile(first_file.properties["Name"])
-                with open(locationFile_duo, "wb") as file:
-                    first_file.download(output)
-                    ctx.execute_query()
-                    file.write(output.getvalue())
-            print("Descargado correctamente")
-        else:
-            print("No hay nada")
-            
-            
         print(f"La carpeta '{denominacion}' existe.")
-    
+        if carpeta_cliente_duo:
+            
+            ctx.load(carpeta_cliente_duo.files)
+            ctx.execute_query()
+            files = carpeta_cliente_duo.files
+            ctx.load(files)
+            ctx.execute_query()
+
+            def definePathFile(name_file):
+                folder = r"C:/Users/Usuario/Documents/Coleyco/RegistroMarca/temporal/"
+                name, extension = os.path.splitext(name_file)
+                return folder+"ilustracion"+extension
+
+
+            locationFile_duo = ""
+            
+            if files:
+                first_file = files[0]
+                file_content = bytearray()
+                with io.BytesIO() as output:
+                    locationFile_duo = definePathFile(first_file.properties["Name"])
+                    with open(locationFile_duo, "wb") as file:
+                        first_file.download(output)
+                        ctx.execute_query()
+                        file.write(output.getvalue())
+                print("Descargado correctamente")
+            else:
+                print("No hay nada")
+                
+                
+            print(f"La carpeta '{denominacion}' existe.")
+        
+        else:
+            print(f"La carpeta '{denominacion}' no existe dentro de '{denominacion}'.")
     else:
-        print(f"La carpeta '{denominacion}' no existe dentro de '{denominacion}'.")
-else:
-    print(f"La carpeta '{denominacion}' no existe.")
+        print(f"La carpeta '{denominacion}' no existe.")
 
 
 def headers(url):
@@ -427,7 +431,7 @@ def datae(referencia, type_natural, denominacion, transliteracion,idsid,identida
     if transliteracion == None:
         transliteracion = ''
     
-    if reivindicacion == False:
+    if reivindicacion == True:
         reivindicacion = '1'
     else:
         reivindicacion = '0'
@@ -735,6 +739,38 @@ def datae_inbox(evento, viewstate,viewstategenerator, ct100):
     }
     return data
 
+def datae_class(viewstate,viewstategenerator, ct100, clase):
+    data ={}
+    data = {
+    'ctl00$ScriptManager': 'ctl00$MainContent$ctrlClassificationEdit$upEdit|ctl00$MainContent$ctrlClassificationEdit$lnkAddClassNoDesc',
+    'ctl00$selectedCulture': '',
+    'ctl00$MainContent$ctrlClassificationEdit$ddlMarkClassificationNumberToAdd': clase,
+    'ctl00$ctl10': ct100,
+    '__EVENTTARGET': 'ctl00$MainContent$ctrlClassificationEdit$lnkAddClassNoDesc',
+    '__EVENTARGUMENT': '',
+    '__VIEWSTATE': viewstate,
+    '__VIEWSTATEGENERATOR': viewstategenerator,
+    '__VIEWSTATEENCRYPTED': '',
+    '__ASYNCPOST': ''
+    }
+    return data
+
+def data_class_duo(viewstate,viewstategenerator, ct100, clase):
+    data ={}
+    data = {
+    'ctl00$selectedCulture': '',
+    'ctl00$MainContent$ctrlClassificationEdit$hcClassif$hfCollapsed': '',
+    'ctl00$MainContent$ctrlClassificationEdit$gvClassifications$ctl02$txtSpecifs': 'Prendas de vestir, calzado, artículos de sombrerería.',
+    'ctl00$MainContent$ctrlClassificationEdit$ddlMarkClassificationNumberToAdd': '25',
+    'ctl00$ctl10': ct100,
+    '__EVENTTARGET': 'ctl00$masterNavigation$btnAccept',
+    '__EVENTARGUMENT': '',
+    '__VIEWSTATE': viewstate,
+    '__VIEWSTATEGENERATOR': viewstategenerator,
+    '__VIEWSTATEENCRYPTED': ''
+    }
+    return data
+
 def url_converted(texto):
     url_pattern = r'href="(https?://[^"]+)"'
     match = re.search(url_pattern, texto)
@@ -842,14 +878,13 @@ viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
 ctl00 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
 print("Estado de la respuesta Solicitud Formulario:", response_form.status_code)
 
-
 if naturaleza == "Mixta":
     type_natural = '3'
     
 elif naturaleza == "Figurativa":
     type_natural = '2'
 
-elif naturaleza == "Nominativo":
+elif naturaleza == "Nominativa":
     type_natural = '1'
     
 if tipoSigno == "Marca":
@@ -872,7 +907,7 @@ else:
 ######## Registro de Marca en nombre propio ############
 if identidad == 'En nombre propio':
     
-    if naturaleza == "Nominativo":
+    if naturaleza == "Nominativa":
         url_search= f'https://sipi.sic.gov.co/sipi/Extra/Entity/Customer/Qbe.aspx?sid={idsid}'
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
@@ -888,6 +923,54 @@ if identidad == 'En nombre propio':
         viewstate= soup_logo.find('input', {'id': '__VIEWSTATE'})['value']
         viewstategenerator = soup_logo.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
         ct100 = soup_logo.find('input', {'name': 'ctl00$ctl10'})['value']
+        
+        #########Agregando Clases###########
+        script = 'ctl00$MainContent$ctrlTMEdit$upClassif|ctl00$MainContent$ctrlTMEdit$ctrlClassif$lnkBtnSearch'
+        event = 'ctl00$MainContent$ctrlTMEdit$ctrlClassif$lnkBtnSearch'
+        data_clase = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate,descReivindicacion,tipoSigno)
+        response_form_class= session.post(url_form,headers=headers_general(url_form), data=data_clase)
+        content_2=response_form_class.text
+        url_clase = response_form_class.url
+        print("Estado de la respuesta entrada a la clases':", response_form_class.status_code)
+        soup= BeautifulSoup(response_form_class.text, 'html.parser')
+        viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+        viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+        ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+        
+        if len(clases) == 1:
+            boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
+            datico = datae_class(viewstate,viewstategenerator,ct100,clases[0])
+            response_class = session.post(url_clase,headers=headers_general(url_clase), data=datico)
+            content_class=response_class.text
+            soup= BeautifulSoup(response_class.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+            #Subimos la clase
+            datico_duo = data_class_duo(viewstate,viewstategenerator,ct100,clases[0])
+            response_class_duo = session.post(url_clase,headers=headers_general_quinque(url_clase,boundary), data=datico_duo)
+            soup= BeautifulSoup(response_class_duo.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+        else:
+            for clasea in clases:
+                datico = datae_class(viewstate,viewstategenerator,ct100,clasea)
+                response_class = session.post(url_clase,headers=headers_general(url_clase), data=datico)
+                content_class=response_class.text
+                soup= BeautifulSoup(response_class.text, 'html.parser')
+                viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+                viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+                ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+                
+            boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
+            datico_duo = data_class_duo(viewstate,viewstategenerator,ct100,clases[0])
+            response_class_duo = session.post(url_clase,headers=headers_general_quinque(url_clase,boundary), data=datico_duo)
+            soup= BeautifulSoup(response_class_duo.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+            
         
         boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
 
@@ -990,6 +1073,54 @@ if identidad == 'En nombre propio':
         viewstategenerator = soup_logo.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
         ct100 = soup_logo.find('input', {'name': 'ctl00$ctl10'})['value']
         
+        #########Agregando Clases###########
+        script = 'ctl00$MainContent$ctrlTMEdit$upClassif|ctl00$MainContent$ctrlTMEdit$ctrlClassif$lnkBtnSearch'
+        event = 'ctl00$MainContent$ctrlTMEdit$ctrlClassif$lnkBtnSearch'
+        data_clase = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate,descReivindicacion,tipoSigno)
+        response_form_class= session.post(url_form,headers=headers_general(url_form), data=data_clase)
+        content_2=response_form_class.text
+        url_clase = response_form_class.url
+        print("Estado de la respuesta entrada a la clases':", response_form_class.status_code)
+        soup= BeautifulSoup(response_form_class.text, 'html.parser')
+        viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+        viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+        ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+        
+        if len(clases) == 1:
+            boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
+            datico = datae_class(viewstate,viewstategenerator,ct100,clases[0])
+            response_class = session.post(url_clase,headers=headers_general(url_clase), data=datico)
+            content_class=response_class.text
+            soup= BeautifulSoup(response_class.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+            #Subimos la clase
+            datico_duo = data_class_duo(viewstate,viewstategenerator,ct100,clases[0])
+            response_class_duo = session.post(url_clase,headers=headers_general_quinque(url_clase,boundary), data=datico_duo)
+            soup= BeautifulSoup(response_class_duo.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+        else:
+            for clasea in clases:
+                datico = datae_class(viewstate,viewstategenerator,ct100,clasea)
+                response_class = session.post(url_clase,headers=headers_general(url_clase), data=datico)
+                content_class=response_class.text
+                soup= BeautifulSoup(response_class.text, 'html.parser')
+                viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+                viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+                ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+                
+            boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
+            datico_duo = data_class_duo(viewstate,viewstategenerator,ct100,clases[0])
+            response_class_duo = session.post(url_clase,headers=headers_general_quinque(url_clase,boundary), data=datico_duo)
+            soup= BeautifulSoup(response_class_duo.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+            
+        
         boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
 
         # FINAL PARA GUARDAR LA SOLICITUD
@@ -1031,7 +1162,7 @@ if identidad == 'En nombre propio':
 ## Registro de Marca como apoderado ############
 elif identidad == 'Como apoderado': 
     
-    if naturaleza == "Nominativo":
+    if naturaleza == "Nominativa":
         url_search= f'https://sipi.sic.gov.co/sipi/Extra/Entity/Customer/Qbe.aspx?sid={idsid}'
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
@@ -1178,12 +1309,11 @@ elif identidad == 'Como apoderado':
             content_duo = response_poder_tris.text
             response_poder_qud = session.get(url_form, headers=headers_general(url_poder))
             soup_logo= BeautifulSoup(response_poder_qud.text, 'html.parser')
-            viewstate_logo= soup_logo.find('input', {'id': '__VIEWSTATE'})['value']
-            viewstategenerator_logo = soup_logo.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
-            ct100_logo = soup_logo.find('input', {'name': 'ctl00$ctl10'})['value']
+            viewstate= soup_logo.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup_logo.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup_logo.find('input', {'name': 'ctl00$ctl10'})['value']
         
             response_poder_tris.raise_for_status()  
-            print('Código de estado:', response_poder_tris.status_code)
             print('Contenido de la respuesta:', response_poder_tris.text)
         except requests.exceptions.RequestException as e:
             print('Error en la solicitud:', e)
@@ -1191,6 +1321,54 @@ elif identidad == 'Como apoderado':
             print("archivo subido")
             
         time.sleep(2)
+        
+        #########Agregando Clases###########
+        script = 'ctl00$MainContent$ctrlTMEdit$upClassif|ctl00$MainContent$ctrlTMEdit$ctrlClassif$lnkBtnSearch'
+        event = 'ctl00$MainContent$ctrlTMEdit$ctrlClassif$lnkBtnSearch'
+        data_clase = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate,descReivindicacion,tipoSigno)
+        response_form_class= session.post(url_form,headers=headers_general(url_form), data=data_clase)
+        content_2=response_form_class.text
+        url_clase = response_form_class.url
+        print("Estado de la respuesta entrada a la clases':", response_form_class.status_code)
+        soup= BeautifulSoup(response_form_class.text, 'html.parser')
+        viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+        viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+        ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+        
+        if len(clases) == 1:
+            boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
+            datico = datae_class(viewstate,viewstategenerator,ct100,clases[0])
+            response_class = session.post(url_clase,headers=headers_general(url_clase), data=datico)
+            content_class=response_class.text
+            soup= BeautifulSoup(response_class.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+            #Subimos la clase
+            datico_duo = data_class_duo(viewstate,viewstategenerator,ct100,clases[0])
+            response_class_duo = session.post(url_clase,headers=headers_general_quinque(url_clase,boundary), data=datico_duo)
+            soup= BeautifulSoup(response_class_duo.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+        else:
+            for clasea in clases:
+                datico = datae_class(viewstate,viewstategenerator,ct100,clasea)
+                response_class = session.post(url_clase,headers=headers_general(url_clase), data=datico)
+                content_class=response_class.text
+                soup= BeautifulSoup(response_class.text, 'html.parser')
+                viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+                viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+                ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+                
+            boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
+            datico_duo = data_class_duo(viewstate,viewstategenerator,ct100,clases[0])
+            response_class_duo = session.post(url_clase,headers=headers_general_quinque(url_clase,boundary), data=datico_duo)
+            soup= BeautifulSoup(response_class_duo.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+            
         boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
 
         # FINAL PARA GUARDAR LA SOLICITUD
@@ -1384,7 +1562,6 @@ elif identidad == 'Como apoderado':
             ct100_logo = soup_logo.find('input', {'name': 'ctl00$ctl10'})['value']
         
             response_poder_tris.raise_for_status()  
-            print('Código de estado:', response_poder_tris.status_code)
             print('Contenido de la respuesta:', response_poder_tris.text)
         except requests.exceptions.RequestException as e:
             print('Error en la solicitud:', e)
@@ -1430,7 +1607,7 @@ elif identidad == 'Como apoderado':
         boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
 
         response_logo_duo = session.post(url_logo, headers=headers_general_quinque(url_logo,boundary), data=data_logo, files=file_logo, allow_redirects=False)
-        print("Estado de la respuesta logotipo':", response_logo.status_code)
+        print("Estado de la respuesta logotipo:", response_logo.status_code)
         redirect_response = requests.get(url_form, cookies=cookies, headers=headers_general(url_logo))
         content_logo= redirect_response.text
         time.sleep(2)
@@ -1439,9 +1616,56 @@ elif identidad == 'Como apoderado':
         viewstategenerator = soup_logo.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
         ct100 = soup_logo.find('input', {'name': 'ctl00$ctl10'})['value']
         
+        #########Agregando Clases###########
+        script = 'ctl00$MainContent$ctrlTMEdit$upClassif|ctl00$MainContent$ctrlTMEdit$ctrlClassif$lnkBtnSearch'
+        event = 'ctl00$MainContent$ctrlTMEdit$ctrlClassif$lnkBtnSearch'
+        data_clase = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate,descReivindicacion,tipoSigno)
+        response_form_class= session.post(url_form,headers=headers_general(url_form), data=data_clase)
+        content_2=response_form_class.text
+        url_clase = response_form_class.url
+        print("Estado de la respuesta entrada a la clases':", response_form_class.status_code)
+        soup= BeautifulSoup(response_form_class.text, 'html.parser')
+        viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+        viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+        ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+        
+        if len(clases) == 1:
+            boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
+            datico = datae_class(viewstate,viewstategenerator,ct100,clases[0])
+            response_class = session.post(url_clase,headers=headers_general(url_clase), data=datico)
+            content_class=response_class.text
+            soup= BeautifulSoup(response_class.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+            #Subimos la clase
+            datico_duo = data_class_duo(viewstate,viewstategenerator,ct100,clases[0])
+            response_class_duo = session.post(url_clase,headers=headers_general_quinque(url_clase,boundary), data=datico_duo)
+            soup= BeautifulSoup(response_class_duo.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+        else:
+            for clasea in clases:
+                datico = datae_class(viewstate,viewstategenerator,ct100,clasea)
+                response_class = session.post(url_clase,headers=headers_general(url_clase), data=datico)
+                content_class=response_class.text
+                soup= BeautifulSoup(response_class.text, 'html.parser')
+                viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+                viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+                ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+                
+            boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
+            datico_duo = data_class_duo(viewstate,viewstategenerator,ct100,clases[0])
+            response_class_duo = session.post(url_clase,headers=headers_general_quinque(url_clase,boundary), data=datico_duo)
+            soup= BeautifulSoup(response_class_duo.text, 'html.parser')
+            viewstate= soup.find('input', {'id': '__VIEWSTATE'})['value']
+            viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
+            ct100 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
+            
+        
+        ##### FINAL PARA GUARDAR LA SOLICITUD ######################
         boundary = f'----WebKitFormBoundary{uuid.uuid4().hex}'
-
-        # FINAL PARA GUARDAR LA SOLICITUD
         script = ''
         event = 'ctl00$masterNavigation$btnSave'
         datae_save_confirm_close = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
