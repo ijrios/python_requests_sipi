@@ -895,6 +895,17 @@ if identidad == 'En nombre propio':
         time.sleep(2)
         print("Estado de la respuesta solicitud confirmar':", response_save_confirm.status_code)
         print("Solicitud de registro de marca realizada con éxito")
+        
+        #------------------------------ Cambio de estado despues de guardar ----------------------------#
+        list_name = "Marcas"
+        column_name = "EstadoRobot"
+        
+        item_id = idS 
+        list_obj = ctx.web.lists.get_by_title(list_name)
+        item = list_obj.get_item_by_id(item_id)
+        item.set_property(column_name, 'Radicado en la SIPI')
+        item.update()
+        ctx.execute_query() 
        
     elif naturaleza == "Mixta" or naturaleza == "Figurativa":
         
@@ -985,6 +996,17 @@ if identidad == 'En nombre propio':
         time.sleep(2)
         print("Estado de la respuesta solicitud confirmar':", response_save_confirm.status_code)
         print("Solicitud de registro de marca realizada con éxito")
+        
+        #------------------------------ Cambio de estado despues de guardar ----------------------------#
+        list_name = "Marcas"
+        column_name = "EstadoRobot"
+        
+        item_id = idS 
+        list_obj = ctx.web.lists.get_by_title(list_name)
+        item = list_obj.get_item_by_id(item_id)
+        item.set_property(column_name, 'Radicado en la SIPI')
+        item.update()
+        ctx.execute_query() 
         
 
         
@@ -1177,6 +1199,17 @@ elif identidad == 'Como apoderado':
         time.sleep(2)
         print("Estado de la respuesta solicitud confirmar':", redirect_response.status_code)
         print("Solicitud de registro de marca realizada con éxito")
+        
+        #------------------------------ Cambio de estado despues de guardar ----------------------------#
+        list_name = "Marcas"
+        column_name = "EstadoRobot"
+        
+        item_id = idS 
+        list_obj = ctx.web.lists.get_by_title(list_name)
+        item = list_obj.get_item_by_id(item_id)
+        item.set_property(column_name, 'Radicado en la SIPI')
+        item.update()
+        ctx.execute_query() 
         
 
         
@@ -1412,4 +1445,15 @@ elif identidad == 'Como apoderado':
         time.sleep(2)
         print("Estado de la respuesta solicitud confirmar':", response_save_confirm.status_code)
         print("Solicitud de registro de marca realizada con éxito")
+        
+        #------------------------------ Cambio de estado despues de guardar ----------------------------#
+        list_name = "Marcas"
+        column_name = "EstadoRobot"
+        
+        item_id = idS 
+        list_obj = ctx.web.lists.get_by_title(list_name)
+        item = list_obj.get_item_by_id(item_id)
+        item.set_property(column_name, 'Radicado en la SIPI')
+        item.update()
+        ctx.execute_query() 
         
