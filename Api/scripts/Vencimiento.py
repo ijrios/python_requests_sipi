@@ -58,20 +58,14 @@ from bs4 import BeautifulSoup
 import json
 
 warnings.filterwarnings("ignore")
-pd.options.mode.chained_assignment = None
-requests.packages.urllib3.disable_warnings() 
-site_url ='https://coleyco.sharepoint.com/sites/Automatizaciones/Registro%20marcas'
 
+pd.options.mode.chained_assignment = None
 #Credenciales
 username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
 site_url = os.getenv('SITE_URL')
 document_library = os.getenv('DOCUMENT_LIBRARY')
-
-try:
-    ctx = ClientContext(site_url).with_credentials(UserCredential(username, password))
-except Exception as e:
-    print(f"Error al establecer conexión: {e}")
+ctx = ClientContext(site_url).with_credentials(UserCredential(username, password))
 
 
 try:
