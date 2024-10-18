@@ -67,8 +67,8 @@ try:
 except Exception as e:
     print(f"Error al establecer conexión: {e}")
 
-idS = sys.argv[1]
-#idS = 1772
+#idS = sys.argv[1]
+idS = 1771
 time.sleep(5)
 try:
     def dataframeSP(lista):
@@ -272,6 +272,7 @@ if carpeta_cliente_duo:
 else:
     print(f"La carpeta '{denominacion}' no existe.")
 
+
 def headers(url):
     headers_form = {}
     if url is None:
@@ -421,7 +422,7 @@ def headers_general_quinque(url, boundary):
          
     return headers_final
 
-def datae(referencia, type_natural, denominacion, transliteracion,idsid,identidad, reivindicacion, script,event, view, viewstategenerator, ct100, viewstate,descReivindicacion):
+def datae(referencia, type_natural, denominacion, transliteracion,idsid,identidad, reivindicacion, script,event, view, viewstategenerator, ct100, viewstate,descReivindicacion, SignoDistintivo):
     data = {}
     if transliteracion == None:
         transliteracion = ''
@@ -455,7 +456,7 @@ def datae(referencia, type_natural, denominacion, transliteracion,idsid,identida
             'ctl00$MainContent$ctrlTMEdit$HeaderPriority$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$hdrClassif$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$HeaderInfo$hfCollapsed': '',
-            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': '1',
+            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': SignoDistintivo,
             'ctl00$MainContent$ctrlTMEdit$ddlType': type_natural,
             'ctl00$MainContent$ctrlTMEdit$txtDenomination':denominacion,
             'ctl00$MainContent$ctrlTMEdit$txtMarkDesc': '',
@@ -491,7 +492,7 @@ def datae(referencia, type_natural, denominacion, transliteracion,idsid,identida
             'ctl00$MainContent$ctrlTMEdit$HeaderPriority$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$hdrClassif$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$HeaderInfo$hfCollapsed': '',
-            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': '1',
+            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': SignoDistintivo,
             'ctl00$MainContent$ctrlTMEdit$ddlType': type_natural,
             'ctl00$MainContent$ctrlTMEdit$txtDenomination':denominacion,
             'ctl00$MainContent$ctrlTMEdit$rbtnColor': reivindicacion,
@@ -531,7 +532,7 @@ def datae(referencia, type_natural, denominacion, transliteracion,idsid,identida
             'ctl00$MainContent$ctrlTMEdit$HeaderPriority$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$hdrClassif$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$HeaderInfo$hfCollapsed': '',
-            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': '1',
+            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': SignoDistintivo,
             'ctl00$MainContent$ctrlTMEdit$ddlType': type_natural,
             'ctl00$MainContent$ctrlTMEdit$txtDenomination':denominacion,
             'ctl00$MainContent$ctrlTMEdit$txtMarkDesc': descReivindicacion,
@@ -572,7 +573,7 @@ def datae(referencia, type_natural, denominacion, transliteracion,idsid,identida
             'ctl00$MainContent$ctrlTMEdit$HeaderPriority$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$hdrClassif$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$HeaderInfo$hfCollapsed': '',
-            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': '1',
+            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': SignoDistintivo,
             'ctl00$MainContent$ctrlTMEdit$ddlType': type_natural,
             'ctl00$MainContent$ctrlTMEdit$txtDenomination':denominacion,
             'ctl00$MainContent$ctrlTMEdit$txtMarkDesc': descReivindicacion,
@@ -614,7 +615,7 @@ def datae(referencia, type_natural, denominacion, transliteracion,idsid,identida
             'ctl00$MainContent$ctrlTMEdit$HeaderPriority$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$hdrClassif$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$HeaderInfo$hfCollapsed': '',
-            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': '1',
+            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature':SignoDistintivo,
             'ctl00$MainContent$ctrlTMEdit$ddlType': type_natural,
             'ctl00$MainContent$ctrlTMEdit$txtDenomination':denominacion,
             'ctl00$MainContent$ctrlTMEdit$txtMarkDesc': '',
@@ -655,7 +656,7 @@ def datae(referencia, type_natural, denominacion, transliteracion,idsid,identida
             'ctl00$MainContent$ctrlTMEdit$HeaderPriority$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$hdrClassif$hfCollapsed': '',
             'ctl00$MainContent$ctrlTMEdit$HeaderInfo$hfCollapsed': '',
-            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': '1',
+            'ctl00$MainContent$ctrlTMEdit$ddlMarkNature': SignoDistintivo,
             'ctl00$MainContent$ctrlTMEdit$ddlType': type_natural,
             'ctl00$MainContent$ctrlTMEdit$txtDenomination':denominacion,
             'ctl00$MainContent$ctrlTMEdit$txtMarkDesc': '',
@@ -841,6 +842,7 @@ viewstategenerator = soup.find('input', {'id': '__VIEWSTATEGENERATOR'})['value']
 ctl00 = soup.find('input', {'name': 'ctl00$ctl10'})['value']
 print("Estado de la respuesta Solicitud Formulario:", response_form.status_code)
 
+
 if naturaleza == "Mixta":
     type_natural = '3'
     
@@ -849,8 +851,24 @@ elif naturaleza == "Figurativa":
 
 elif naturaleza == "Nominativo":
     type_natural = '1'
-
-
+    
+if tipoSigno == "Marca":
+    tipoSigno = '1'
+elif tipoSigno == "Marca Colectiva":
+    tipoSigno = '2'
+elif tipoSigno == "Marca de Certificación":
+    tipoSigno = '3'
+elif tipoSigno == "Enseña Comercial":
+    tipoSigno = '4'
+elif tipoSigno == "Lema Comercial":
+    tipoSigno = '5'
+elif tipoSigno == "Nombre Comercial":
+    tipoSigno = '6'
+elif tipoSigno == "Denominacion de Origen":
+    tipoSigno = '7'
+else:
+    tipoSigno = '0'
+    
 ######## Registro de Marca en nombre propio ############
 if identidad == 'En nombre propio':
     
@@ -859,7 +877,7 @@ if identidad == 'En nombre propio':
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
-        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion, script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion)
+        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion, script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_datae = session.post(url_form,headers=headers_general(url_form), data=data)
         #redirect_response = session.get(url_form, headers=headers_general(url_form))
         print("Estado de la respuesta identidadad como apoderado':", response_datae.status_code)
@@ -876,7 +894,7 @@ if identidad == 'En nombre propio':
         # FINAL PARA GUARDAR LA SOLICITUD
         script = ''
         event = 'ctl00$masterNavigation$btnSave'
-        datae_save_confirm_close = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion)
+        datae_save_confirm_close = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_save_confirm_close = session.post(url_form,headers=headers_general_quinque(url_form,boundary), data=datae_save_confirm_close, allow_redirects=False)
         content_save_confirm_close=response_save_confirm_close.text
         time.sleep(2)
@@ -889,7 +907,7 @@ if identidad == 'En nombre propio':
 
         script = ''
         event = 'ctl00$MainContent$ctrlSaveAppConfirm$lnkBtnAccept'
-        datae_save_confirm = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion)
+        datae_save_confirm = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_save_confirm = session.post(url_form,headers=headers_general_quinque(url_form,boundary), data=datae_save_confirm, allow_redirects=False)
         content_save_confirm=response_save_confirm.text
         time.sleep(2)
@@ -913,7 +931,7 @@ if identidad == 'En nombre propio':
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
-        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion, script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion)
+        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion, script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_datae = session.post(url_form,headers=headers_general(url_form), data=data)
         #redirect_response = session.get(url_form, headers=headers_general(url_form))
         print("Estado de la respuesta identidadad como apoderado':", response_datae.status_code)
@@ -930,7 +948,7 @@ if identidad == 'En nombre propio':
 
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlPictureList$upDocGrid|ctl00$MainContent$ctrlTMEdit$ctrlPictureList$lnkbtnAddDocument'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlPictureList$lnkbtnAddDocument'
-        dataLogo = datae(referencia,type_natural,denominacion,transliteracion,idsid,identidad,reivindicacion,script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion)
+        dataLogo = datae(referencia,type_natural,denominacion,transliteracion,idsid,identidad,reivindicacion,script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_logo = session.post(url_form, headers=headers_general(url_form), data=dataLogo, allow_redirects=False)
         print("Estado de la respuesta logotipo':", response_logo.status_code)
         redirect_response = session.get(url_logo, headers=headers_general(url_form))
@@ -977,7 +995,7 @@ if identidad == 'En nombre propio':
         # FINAL PARA GUARDAR LA SOLICITUD
         script = ''
         event = 'ctl00$masterNavigation$btnSave'
-        datae_save_confirm_close = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion)
+        datae_save_confirm_close = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_save_confirm_close = session.post(url_form,headers=headers_general_quinque(url_form,boundary), data=datae_save_confirm_close, allow_redirects=False)
         content_save_confirm_close=response_save_confirm_close.text
         time.sleep(2)
@@ -990,7 +1008,7 @@ if identidad == 'En nombre propio':
 
         script = ''
         event = 'ctl00$MainContent$ctrlSaveAppConfirm$lnkBtnAccept'
-        datae_save_confirm = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion)
+        datae_save_confirm = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_save_confirm = session.post(url_form,headers=headers_general_quinque(url_form,boundary), data=datae_save_confirm, allow_redirects=False)
         content_save_confirm=response_save_confirm.text
         time.sleep(2)
@@ -1018,7 +1036,7 @@ elif identidad == 'Como apoderado':
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
-        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion, script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion)
+        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion, script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_datae = session.post(url_form,headers=headers_general(url_form), data=data)
         #redirect_response = session.get(url_form, headers=headers_general(url_form))
         print("Estado de la respuesta identidadad como apoderado':", response_datae.status_code)
@@ -1032,7 +1050,7 @@ elif identidad == 'Como apoderado':
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$ctrlApplicant$lnkBtnSearch'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$ctrlApplicant$lnkBtnSearch'
-        data_customer = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate,descReivindicacion)
+        data_customer = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate,descReivindicacion,tipoSigno)
         response_form_duo = session.post(url_form,headers=headers_general(url_form), data=data_customer)
         content_2=response_form_duo.text
         time.sleep(2)
@@ -1124,7 +1142,7 @@ elif identidad == 'Como apoderado':
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$ctrlDocumentList$lnkBtnAdd'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$ctrlDocumentList$lnkBtnAdd'
-        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate_poder,descReivindicacion)
+        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate_poder,descReivindicacion,tipoSigno)
         response_poder_unus = session.post(url_form,headers=headers_general(url_form), data=data, allow_redirects=False)
         get_customer_duo = session.get(url_poder, headers=headers_general(url_form))
         soup= BeautifulSoup(get_customer_duo.text, 'html.parser')
@@ -1178,7 +1196,7 @@ elif identidad == 'Como apoderado':
         # FINAL PARA GUARDAR LA SOLICITUD
         script = ''
         event = 'ctl00$masterNavigation$btnSave'
-        datae_save_confirm_close = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,5,viewstategenerator,ct100,viewstate,descReivindicacion)
+        datae_save_confirm_close = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,5,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_save_confirm_close = session.post(url_form,headers=headers_general_quinque(url_form,boundary), data=datae_save_confirm_close, allow_redirects=False)
         redirect_response = session.get(url_form, headers=headers_general(url_form))
         content_save_confirm_close=redirect_response.text
@@ -1192,7 +1210,7 @@ elif identidad == 'Como apoderado':
 
         script = ''
         event = 'ctl00$MainContent$ctrlSaveAppConfirm$lnkBtnAccept'
-        datae_save_confirm = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,6,viewstategenerator,ct100,viewstate,descReivindicacion)
+        datae_save_confirm = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,6,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_save_confirm = session.post(url_form,headers=headers_general_quinque(url_form,boundary), data=datae_save_confirm, allow_redirects=False)
         redirect_response = session.get(url_form, headers=headers_general(url_form))
         content_save_confirm=redirect_response.text
@@ -1219,7 +1237,7 @@ elif identidad == 'Como apoderado':
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$rbtnlIdentity$1'
-        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion, script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion)
+        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion, script,event,2,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_datae = session.post(url_form,headers=headers_general(url_form), data=data)
         #redirect_response = session.get(url_form, headers=headers_general(url_form))
         print("Estado de la respuesta identidadad como apoderado':", response_datae.status_code)
@@ -1233,7 +1251,7 @@ elif identidad == 'Como apoderado':
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$ctrlApplicant$lnkBtnSearch'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$ctrlApplicant$lnkBtnSearch'
-        data_customer = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate,descReivindicacion)
+        data_customer = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate,descReivindicacion,tipoSigno)
         response_form_duo = session.post(url_form,headers=headers_general(url_form), data=data_customer)
         content_2=response_form_duo.text
         time.sleep(2)
@@ -1325,7 +1343,7 @@ elif identidad == 'Como apoderado':
         
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$UpdatePanel1|ctl00$MainContent$ctrlTMEdit$ctrlApplicant$ctrlDocumentList$lnkBtnAdd'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlApplicant$ctrlDocumentList$lnkBtnAdd'
-        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate_poder,descReivindicacion)
+        data = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad,reivindicacion,script,event, 2, viewstategenerator, ct100, viewstate_poder,descReivindicacion,tipoSigno)
         response_poder_unus = session.post(url_form,headers=headers_general(url_form), data=data, allow_redirects=False)
         get_customer_duo = session.get(url_poder, headers=headers_general(url_form))
         soup= BeautifulSoup(get_customer_duo.text, 'html.parser')
@@ -1379,7 +1397,7 @@ elif identidad == 'Como apoderado':
 
         script = 'ctl00$MainContent$ctrlTMEdit$ctrlPictureList$upDocGrid|ctl00$MainContent$ctrlTMEdit$ctrlPictureList$lnkbtnAddDocument'
         event = 'ctl00$MainContent$ctrlTMEdit$ctrlPictureList$lnkbtnAddDocument'
-        dataLogo = datae(referencia,type_natural,denominacion,transliteracion,idsid,identidad,reivindicacion,script,event,2,viewstategenerator_logo,ct100_logo,viewstate_logo,descReivindicacion)
+        dataLogo = datae(referencia,type_natural,denominacion,transliteracion,idsid,identidad,reivindicacion,script,event,2,viewstategenerator_logo,ct100_logo,viewstate_logo,descReivindicacion,tipoSigno)
         response_logo = session.post(url_form, headers=headers_general(url_form), data=dataLogo, allow_redirects=False)
         print("Estado de la respuesta logotipo':", response_logo.status_code)
         redirect_response = session.get(url_logo, headers=headers_general(url_form))
@@ -1426,7 +1444,7 @@ elif identidad == 'Como apoderado':
         # FINAL PARA GUARDAR LA SOLICITUD
         script = ''
         event = 'ctl00$masterNavigation$btnSave'
-        datae_save_confirm_close = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion)
+        datae_save_confirm_close = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_save_confirm_close = session.post(url_form,headers=headers_general_quinque(url_form,boundary), data=datae_save_confirm_close, allow_redirects=False)
         content_save_confirm_close=response_save_confirm_close.text
         time.sleep(2)
@@ -1439,7 +1457,7 @@ elif identidad == 'Como apoderado':
 
         script = ''
         event = 'ctl00$MainContent$ctrlSaveAppConfirm$lnkBtnAccept'
-        datae_save_confirm = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion)
+        datae_save_confirm = datae(referencia, type_natural, denominacion, transliteracion, idsid,identidad, reivindicacion,script,event,3,viewstategenerator,ct100,viewstate,descReivindicacion,tipoSigno)
         response_save_confirm = session.post(url_form,headers=headers_general_quinque(url_form,boundary), data=datae_save_confirm, allow_redirects=False)
         content_save_confirm=response_save_confirm.text
         time.sleep(2)
