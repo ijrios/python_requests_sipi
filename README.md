@@ -33,8 +33,4 @@ Esta API, construida con Python y utilizando la biblioteca `requests`, proporcio
   - dotenv
   - (y otras dependencias que tu proyecto necesite)
 
-## Instalación
 
-1. Clona este repositorio:
-   ```bash
-   git clone https://github.com/tu_usuario/tu_repositorio.git
